@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bass Notes Learning</title>
 
-    <!-- VexFlow Library for Music Notation -->
-    <script src="https://cdn.jsdelivr.net/npm/vexflow@4.2.2/build/cjs/vexflow.js"></script>
+    <!-- abcjs Library for Music Notation (sostituisce VexFlow) -->
+    <script src="https://cdn.jsdelivr.net/npm/abcjs@6.2.3/dist/abcjs-basic-min.js"></script>
 
     <!-- ========================================
          CSS SECTION
@@ -21,16 +21,16 @@
         }
 
         :root {
-            --primary: #667eea;
-            --primary-dark: #764ba2;
+            --primary: #8B4513;
+            --primary-dark: #654321;
             --success: #10b981;
             --error: #ef4444;
             --text-dark: #1f2937;
             --text-light: #6b7280;
             --bg-light: #f9fafb;
-            --border-radius: 12px;
-            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.15);
+            --border-radius: 8px;
+            --shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.15);
         }
 
         body {
@@ -40,15 +40,15 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 10px;
             color: var(--text-dark);
         }
 
         /* ===== CONTAINER PRINCIPALE ===== */
         .app-container {
             background: white;
-            border-radius: 20px;
-            padding: 30px;
+            border-radius: 12px;
+            padding: 15px;
             box-shadow: var(--shadow-lg);
             max-width: 600px;
             width: 100%;
@@ -57,50 +57,50 @@
         /* ===== HEADER ===== */
         .app-header {
             text-align: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
             border-bottom: 2px solid var(--bg-light);
         }
 
         .app-header h1 {
             color: var(--primary);
-            font-size: 1.8em;
-            margin-bottom: 5px;
+            font-size: 1.4em;
+            margin-bottom: 3px;
         }
 
         .score-display {
-            font-size: 1.2em;
+            font-size: 1em;
             color: var(--text-light);
             font-weight: bold;
         }
 
         .score-display .score {
             color: var(--primary);
-            font-size: 1.5em;
+            font-size: 1.3em;
         }
 
         /* ===== EXERCISE AREA ===== */
         .exercise-container {
             background: var(--bg-light);
             border-radius: var(--border-radius);
-            padding: 20px;
-            margin: 20px 0;
+            padding: 12px;
+            margin: 10px 0;
         }
 
         .exercise-type {
             text-align: center;
             color: var(--text-light);
-            font-size: 0.9em;
+            font-size: 0.75em;
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: 15px;
+            margin-bottom: 6px;
         }
 
         .exercise-question {
             text-align: center;
-            font-size: 1.3em;
+            font-size: 1.1em;
             color: var(--text-dark);
-            margin-bottom: 20px;
+            margin-bottom: 0;
             font-weight: 500;
         }
 
@@ -108,10 +108,10 @@
         #staff-container {
             background: white;
             border-radius: var(--border-radius);
-            padding: 20px;
-            margin: 20px 0;
+            padding: 10px;
+            margin: 10px 0;
             box-shadow: var(--shadow);
-            min-height: 150px;
+            min-height: 120px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -124,7 +124,7 @@
 
         .hint-controls {
             text-align: center;
-            margin: 15px 0 10px 0;
+            margin: 8px 0 5px 0;
         }
 
         .checkbox-label {
@@ -145,8 +145,8 @@
 
         .note-hint {
             text-align: center;
-            margin-top: 10px;
-            font-size: 1.2em;
+            margin-top: 5px;
+            font-size: 1em;
             font-weight: bold;
             color: var(--primary);
             font-family: 'Courier New', monospace;
@@ -157,13 +157,13 @@
             text-align: center;
             background: white;
             border-radius: var(--border-radius);
-            padding: 30px;
-            margin: 20px 0;
+            padding: 15px;
+            margin: 10px 0;
             box-shadow: var(--shadow);
         }
 
         .fretting-display .fretting {
-            font-size: 4em;
+            font-size: 3em;
             font-weight: bold;
             color: var(--primary);
             font-family: 'Courier New', monospace;
@@ -173,56 +173,56 @@
         .keyboard-container {
             background: white;
             border-radius: var(--border-radius);
-            padding: 20px;
-            margin: 20px 0;
+            padding: 12px;
+            margin: 10px 0;
             box-shadow: var(--shadow);
         }
 
         .keyboard-label {
             text-align: center;
             color: var(--text-light);
-            font-size: 0.9em;
-            margin-bottom: 10px;
+            font-size: 0.8em;
+            margin-bottom: 6px;
         }
 
         .current-input {
             text-align: center;
-            font-size: 2em;
+            font-size: 1.6em;
             font-weight: bold;
             color: var(--primary);
-            min-height: 50px;
+            min-height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             font-family: 'Courier New', monospace;
         }
 
         .keyboard-section {
-            margin: 15px 0;
+            margin: 10px 0;
         }
 
         .keyboard-section-label {
-            font-size: 0.85em;
+            font-size: 0.75em;
             color: var(--text-light);
-            margin-bottom: 8px;
+            margin-bottom: 5px;
             text-align: center;
         }
 
         .keyboard-buttons {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 6px;
             justify-content: center;
         }
 
         .key-btn {
             background: var(--bg-light);
             border: 2px solid #e5e7eb;
-            border-radius: 8px;
-            padding: 12px 16px;
-            min-width: 50px;
-            font-size: 1em;
+            border-radius: 6px;
+            padding: 10px 14px;
+            min-width: 45px;
+            font-size: 0.95em;
             font-weight: bold;
             color: var(--text-dark);
             cursor: pointer;
@@ -248,17 +248,17 @@
         }
 
         .key-btn.small {
-            min-width: 40px;
-            padding: 10px 12px;
-            font-size: 0.9em;
+            min-width: 36px;
+            padding: 8px 10px;
+            font-size: 0.85em;
         }
 
         /* ===== ACTION BUTTONS ===== */
         .action-buttons {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             justify-content: center;
-            margin: 20px 0;
+            margin: 10px 0;
             flex-wrap: wrap;
         }
 
@@ -266,9 +266,9 @@
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
             border: none;
-            padding: 14px 28px;
+            padding: 10px 20px;
             border-radius: 50px;
-            font-size: 1em;
+            font-size: 0.9em;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s;
@@ -277,7 +277,7 @@
 
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 6px 12px rgba(139, 69, 19, 0.4);
         }
 
         .btn:active {
@@ -302,8 +302,8 @@
         .feedback {
             background: var(--bg-light);
             border-radius: var(--border-radius);
-            padding: 20px;
-            margin: 20px 0;
+            padding: 12px;
+            margin: 10px 0;
             text-align: center;
             display: none;
             animation: fadeIn 0.3s;
@@ -324,32 +324,32 @@
         }
 
         .feedback-icon {
-            font-size: 3em;
-            margin-bottom: 10px;
+            font-size: 2em;
+            margin-bottom: 6px;
         }
 
         .feedback-message {
-            font-size: 1.2em;
+            font-size: 1em;
             font-weight: bold;
-            margin-bottom: 10px;
+            margin-bottom: 6px;
         }
 
         .feedback-details {
-            font-size: 0.95em;
+            font-size: 0.85em;
             color: var(--text-light);
-            margin-top: 10px;
+            margin-top: 6px;
         }
 
         .alternatives {
-            margin-top: 15px;
-            padding: 10px;
+            margin-top: 8px;
+            padding: 8px;
             background: rgba(255, 255, 255, 0.5);
-            border-radius: 8px;
+            border-radius: 6px;
         }
 
         .alternatives-title {
             font-weight: bold;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
             color: var(--text-dark);
         }
 
@@ -374,33 +374,33 @@
         /* ===== RESPONSIVE ===== */
         @media (max-width: 480px) {
             .app-container {
-                padding: 20px;
+                padding: 12px;
             }
 
             .app-header h1 {
-                font-size: 1.4em;
+                font-size: 1.3em;
             }
 
             .exercise-question {
-                font-size: 1.1em;
+                font-size: 1em;
             }
 
             .fretting-display .fretting {
-                font-size: 3em;
+                font-size: 2.5em;
             }
 
             .current-input {
-                font-size: 1.5em;
+                font-size: 1.4em;
             }
 
             .key-btn {
-                min-width: 44px;
-                padding: 10px 14px;
+                min-width: 42px;
+                padding: 8px 12px;
             }
 
             .btn {
-                padding: 12px 24px;
-                font-size: 0.95em;
+                padding: 8px 18px;
+                font-size: 0.85em;
             }
         }
 
@@ -408,33 +408,33 @@
         .settings-panel {
             background: var(--bg-light);
             border-radius: var(--border-radius);
-            padding: 20px;
-            margin: 20px 0;
+            padding: 12px;
+            margin: 10px 0;
         }
 
         .settings-title {
-            font-size: 1em;
+            font-size: 0.9em;
             font-weight: bold;
             color: var(--text-dark);
-            margin-bottom: 15px;
+            margin-bottom: 8px;
             text-align: center;
         }
 
         .settings-section {
-            margin: 15px 0;
+            margin: 8px 0;
         }
 
         .settings-label {
-            font-size: 0.9em;
+            font-size: 0.8em;
             color: var(--text-light);
-            margin-bottom: 10px;
+            margin-bottom: 6px;
             display: block;
             font-weight: 600;
         }
 
         .radio-group {
             display: flex;
-            gap: 10px;
+            gap: 6px;
             flex-wrap: wrap;
             justify-content: center;
         }
@@ -453,9 +453,9 @@
             display: inline-block;
             background: white;
             border: 2px solid #e5e7eb;
-            border-radius: 8px;
-            padding: 10px 20px;
-            font-size: 0.9em;
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-size: 0.75em;
             font-weight: 600;
             color: var(--text-dark);
             cursor: pointer;
@@ -778,18 +778,16 @@
 
         // =====================================
         // PRESENTATION LAYER: StaffRenderer
-        // Wrapper per VexFlow
+        // Wrapper per abcjs (sostituisce VexFlow)
         // =====================================
         class StaffRenderer {
             constructor(containerId) {
                 this.container = document.getElementById(containerId);
-                this.vf = null;
-                this.context = null;
             }
 
             /**
-             * Renderizza una nota sul pentagramma
-             * @param {string} note - Es: "C2", "E1"
+             * Renderizza una nota sul pentagramma usando abcjs
+             * @param {string} note - Es: "C2", "E1", "F#3"
              */
             render(note) {
                 if (!note) return;
@@ -797,44 +795,18 @@
                 // Pulisci container
                 this.container.innerHTML = '';
 
-                // Crea renderer VexFlow
-                const VF = Vex.Flow;
-                this.vf = new VF.Factory({
-                    renderer: { elementId: this.container.id, width: 400, height: 200 }
+                // Converti nota in formato ABC (es: "E1" → "E,,")
+                const abcNote = this._toABCNotation(note);
+
+                // Crea stringa ABC completa
+                const abcString = `X:1\nL:1/1\nK:bass\n${abcNote}|]`;
+
+                // Renderizza con abcjs
+                ABCJS.renderAbc(this.container.id, abcString, {
+                    scale: 1.0,
+                    staffwidth: 320,
+                    responsive: 'resize'
                 });
-
-                this.context = this.vf.getContext();
-
-                // Crea pentagramma con chiave di basso
-                const stave = this.vf.Stave({ x: 10, y: 40, width: 350 });
-                stave.addClef('bass').addTimeSignature('4/4');
-
-                // Converti nota in formato VexFlow (es: "C2" → {key: "c/2", accidental: "#"})
-                const vexNoteData = this._toVexFlowNotation(note);
-
-                // Crea nota
-                const staveNote = this.vf.StaveNote({
-                    keys: [vexNoteData.key],
-                    duration: 'w'
-                });
-
-                // Aggiungi alterazione se presente
-                if (vexNoteData.accidental) {
-                    staveNote.addModifier(new VF.Accidental(vexNoteData.accidental), 0);
-                }
-
-                const notes = [staveNote];
-
-                // Crea voice e formatta
-                const voice = this.vf.Voice().setMode(VF.Voice.Mode.SOFT);
-                voice.addTickables(notes);
-
-                const formatter = this.vf.Formatter();
-                formatter.joinVoices([voice]).formatToStave([voice], stave);
-
-                // Render
-                stave.setContext(this.context).draw();
-                voice.draw(this.context, stave);
             }
 
             /**
@@ -846,30 +818,26 @@
 
             // ===== PRIVATE METHODS =====
 
-            _toVexFlowNotation(note) {
-                // OFFSET DISPLAY: Sistema per posizionare correttamente le note del basso sul pentagramma
-                // Il basso suona molto più basso di come viene scritto in chiave di basso.
-                // Per evitare troppe linee aggiuntive, le note vengono "trasposte" visivamente.
+            _toABCNotation(note) {
+                // Converti notazione scientifica (E1, C#2, etc.) → ABC notation
+                // In ABC: virgole (,) abbassano l'ottava, apostrofi (') alzano
                 //
-                // Offset totale = (OCTAVE_OFFSET * 12) + SEMITONE_OFFSET
-                // Valori corretti per basso 4 corde (E A D G):
-                const OCTAVE_OFFSET = 3;     // Ottave intere: 3 ottave = 36 semitoni
-                const SEMITONE_OFFSET = 0;   // NESSUN aggiustamento - test empirico
-                // TOTALE: 33 semitoni (circa 2 ottave e mezzo di trasposizione visiva)
-                //
-                // Risultato: e0 (E1) appare nello spazio sotto il pentagramma
-                //            C2 appare tra 2a e 3a riga dal basso
+                // Formula per bass clef in ABC:
+                // - Ottava 1 (E1, A1): usa ,, (due virgole)
+                // - Ottava 2 (D2, G2, C2): usa , (una virgola)
+                // - Ottava 3: nessun modificatore
+                // - Ottava 4: usa ' (apostrofo)
 
                 // Parse nota (supporta C2, C#2, Cb2, Cs2, Cf2, etc.)
                 let noteName, octave, accidental = '';
+
                 if (note.length >= 3 && (note[1] === '#' || note[1] === 'b' || note[1] === 's' || note[1] === 'S' || note[1] === 'f' || note[1] === 'F')) {
                     // Nota con alterazione: C#2, Db3, Cs2 (sharp), Cf2 (flat), etc.
                     noteName = note[0].toUpperCase();
                     const acc = note[1].toLowerCase();
-                    // Converti notazione URL: s→#, f→b (flat usa già 'b')
-                    if (acc === 's') accidental = '#';
-                    else if (acc === 'f') accidental = 'b';
-                    else accidental = acc; // già # o b
+                    // Converti notazione URL: s→^, f→_ (ABC usa ^ per sharp, _ per flat)
+                    if (acc === 's' || acc === '#') accidental = '^';
+                    else if (acc === 'f' || acc === 'b') accidental = '_';
                     octave = parseInt(note.substring(2));
                 } else {
                     // Nota naturale: C2, D3, etc.
@@ -880,39 +848,25 @@
                 // Validazione input
                 if (!noteName || isNaN(octave)) {
                     console.error(`Nota invalida: "${note}". Usa formato: C2, E1, C#3, etc.`);
-                    return {key: 'c/4', accidental: null}; // fallback
+                    return 'C,'; // fallback
                 }
 
-                // Mappa note → offset semitoni
-                const NOTE_OFFSETS = {'C': 0, 'D': 2, 'E': 4, 'F': 5, 'G': 7, 'A': 9, 'B': 11};
+                // Calcola modificatore ottava per ABC
+                // Formula: commas = 3 - octave (negativo = apostrofi)
+                const octaveModifier = 3 - octave;
+                let modifier = '';
 
-                // Calcola semitoni totali della nota (incluse alterazioni)
-                let totalSemitones = (octave + 1) * 12 + NOTE_OFFSETS[noteName];
-                if (accidental === '#') totalSemitones += 1;
-                if (accidental === 'b') totalSemitones -= 1;
+                if (octaveModifier > 0) {
+                    // Usa virgole (abbassa ottava)
+                    modifier = ','.repeat(octaveModifier);
+                } else if (octaveModifier < 0) {
+                    // Usa apostrofi (alza ottava)
+                    modifier = "'".repeat(-octaveModifier);
+                }
+                // Se octaveModifier === 0, nessun modificatore
 
-                // Applica offset: ottave + semitoni
-                const adjustedSemitones = totalSemitones + (OCTAVE_OFFSET * 12) + SEMITONE_OFFSET;
-
-                // Riconverti in nota + ottava (con supporto diesis/bemolle)
-                const adjustedOctave = Math.floor(adjustedSemitones / 12) - 1;
-                const noteIndex = adjustedSemitones % 12;
-
-                // Mappa semitoni → nota base + alterazione
-                const semitoneMap = {
-                    0:  {note: 'c', acc: null},  1:  {note: 'c', acc: '#'},
-                    2:  {note: 'd', acc: null},  3:  {note: 'd', acc: '#'},
-                    4:  {note: 'e', acc: null},  5:  {note: 'f', acc: null},
-                    6:  {note: 'f', acc: '#'},   7:  {note: 'g', acc: null},
-                    8:  {note: 'g', acc: '#'},   9:  {note: 'a', acc: null},
-                    10: {note: 'a', acc: '#'},   11: {note: 'b', acc: null}
-                };
-
-                const noteData = semitoneMap[noteIndex];
-                return {
-                    key: `${noteData.note}/${adjustedOctave}`,
-                    accidental: noteData.acc
-                };
+                // Costruisci stringa ABC: [accidentale]NotaNome[modificatore]
+                return `${accidental}${noteName}${modifier}`;
             }
         }
 
