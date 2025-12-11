@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Bass Clef Position Shift</title>
+    <script src="https://cdn.jsdelivr.net/npm/vexflow@4.2.2/build/cjs/vexflow.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .test-item {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-label {
+            font-size: 18px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .test-description {
+            font-size: 14px;
+            color: #666;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .staff-container {
+            min-height: 200px;
+        }
+        .instructions {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #ffc107;
+        }
+        .highlight {
+            background: #d4edda;
+            border-left-color: #28a745;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎸 Test - Shift Verticale dello Staff</h1>
+
+    <div class="instructions">
+        <h2>💡 Idea</h2>
+        <p>Se <strong>e/4</strong> è vicino ma troppo alto di ~1 tono (2 semitoni), provo a <strong>spostare lo staff verticalmente</strong> invece di cambiare la nota!</p>
+        <p><strong>Quale versione corrisponde alla tua bibbia?</strong></p>
+    </div>
+
+    <div class="test-grid">
+        <!-- E1 come e/4 con staff shift -->
+        <div class="test-item">
+            <div class="test-label">E1 → e/4 (Y standard)</div>
+            <div class="test-description">Staff posizione normale (Y=40)</div>
+            <div id="staff-normal" class="staff-container"></div>
+        </div>
+
+        <div class="test-item highlight">
+            <div class="test-label">E1 → e/4 (Y+10 - spostato GIÙ)</div>
+            <div class="test-description">Staff spostato 10px in basso</div>
+            <div id="staff-down10" class="staff-container"></div>
+        </div>
+
+        <div class="test-item highlight">
+            <div class="test-label">E1 → e/4 (Y+15 - spostato GIÙ)</div>
+            <div class="test-description">Staff spostato 15px in basso</div>
+            <div id="staff-down15" class="staff-container"></div>
+        </div>
+
+        <div class="test-item highlight">
+            <div class="test-label">E1 → e/4 (Y+20 - spostato GIÙ)</div>
+            <div class="test-description">Staff spostato 20px in basso</div>
+            <div id="staff-down20" class="staff-container"></div>
+        </div>
+
+        <!-- Alternative: provo e/3 con shift -->
+        <div class="test-item">
+            <div class="test-label">ALTERNATIVA: E1 → e/3 (Y standard)</div>
+            <div class="test-description">Provo anche ottava 3 normale</div>
+            <div id="staff-e3-normal" class="staff-container"></div>
+        </div>
+
+        <div class="test-item highlight">
+            <div class="test-label">ALTERNATIVA: E1 → e/3 (Y-10 - spostato SU)</div>
+            <div class="test-description">e/3 ma spostato 10px verso l'alto</div>
+            <div id="staff-e3-up10" class="staff-container"></div>
+        </div>
+    </div>
+
+    <script>
+        const VF = Vex.Flow;
+
+        function renderNoteWithShift(containerId, noteKey, staffY) {
+            const container = document.getElementById(containerId);
+
+            const renderer = new VF.Renderer(container, VF.Renderer.Backends.SVG);
+            renderer.resize(400, 200);
+            const context = renderer.getContext();
+
+            const stave = new VF.Stave(10, staffY, 350);
+            stave.addClef('bass').addTimeSignature('4/4');
+            stave.setContext(context).draw();
+
+            const notes = [
+                new VF.StaveNote({
+                    keys: [noteKey],
+                    duration: 'w'
+                })
+            ];
+
+            const voice = new VF.Voice({ num_beats: 4, beat_value: 4 });
+            voice.addTickables(notes);
+
+            new VF.Formatter()
+                .joinVoices([voice])
+                .format([voice], 300);
+
+            voice.draw(context, stave);
+        }
+
+        // Test e/4 con diversi shift verticali
+        renderNoteWithShift('staff-normal', 'e/4', 40);      // Standard
+        renderNoteWithShift('staff-down10', 'e/4', 50);      // Spostato giù 10px
+        renderNoteWithShift('staff-down15', 'e/4', 55);      // Spostato giù 15px
+        renderNoteWithShift('staff-down20', 'e/4', 60);      // Spostato giù 20px
+
+        // Test e/3 con shift
+        renderNoteWithShift('staff-e3-normal', 'e/3', 40);   // e/3 normale
+        renderNoteWithShift('staff-e3-up10', 'e/3', 30);     // e/3 spostato su 10px
+    </script>
+</body>
+</html>

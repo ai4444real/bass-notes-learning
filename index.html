@@ -5,236 +5,1663 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bass Notes Learning</title>
 
+    <!-- VexFlow Library for Music Notation -->
+    <script src="https://cdn.jsdelivr.net/npm/vexflow@4.2.2/build/cjs/vexflow.js"></script>
+
     <!-- ========================================
          CSS SECTION
-         Tutti gli stili dell'applicazione
+         Organizzato per componenti
          ======================================== -->
     <style>
-        /* Reset e configurazione base */
+        /* ===== BASE & RESET ===== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        :root {
+            --primary: #667eea;
+            --primary-dark: #764ba2;
+            --success: #10b981;
+            --error: #ef4444;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+            --bg-light: #f9fafb;
+            --border-radius: 12px;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
+            color: var(--text-dark);
         }
 
-        /* Container principale */
-        .container {
+        /* ===== CONTAINER PRINCIPALE ===== */
+        .app-container {
             background: white;
             border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            max-width: 500px;
+            padding: 30px;
+            box-shadow: var(--shadow-lg);
+            max-width: 600px;
             width: 100%;
+        }
+
+        /* ===== HEADER ===== */
+        .app-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--bg-light);
+        }
+
+        .app-header h1 {
+            color: var(--primary);
+            font-size: 1.8em;
+            margin-bottom: 5px;
+        }
+
+        .score-display {
+            font-size: 1.2em;
+            color: var(--text-light);
+            font-weight: bold;
+        }
+
+        .score-display .score {
+            color: var(--primary);
+            font-size: 1.5em;
+        }
+
+        /* ===== EXERCISE AREA ===== */
+        .exercise-container {
+            background: var(--bg-light);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .exercise-type {
+            text-align: center;
+            color: var(--text-light);
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+
+        .exercise-question {
+            text-align: center;
+            font-size: 1.3em;
+            color: var(--text-dark);
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        /* ===== STAFF CONTAINER (VexFlow) ===== */
+        #staff-container {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: var(--shadow);
+            min-height: 150px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #staff-canvas {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .hint-controls {
+            text-align: center;
+            margin: 15px 0 10px 0;
+        }
+
+        .checkbox-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9em;
+            color: var(--text-light);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .note-hint {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: var(--primary);
+            font-family: 'Courier New', monospace;
+        }
+
+        /* ===== FRETTING DISPLAY ===== */
+        .fretting-display {
+            text-align: center;
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: var(--shadow);
+        }
+
+        .fretting-display .fretting {
+            font-size: 4em;
+            font-weight: bold;
+            color: var(--primary);
+            font-family: 'Courier New', monospace;
+        }
+
+        /* ===== VIRTUAL KEYBOARD ===== */
+        .keyboard-container {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: var(--shadow);
+        }
+
+        .keyboard-label {
+            text-align: center;
+            color: var(--text-light);
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .current-input {
+            text-align: center;
+            font-size: 2em;
+            font-weight: bold;
+            color: var(--primary);
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .keyboard-section {
+            margin: 15px 0;
+        }
+
+        .keyboard-section-label {
+            font-size: 0.85em;
+            color: var(--text-light);
+            margin-bottom: 8px;
             text-align: center;
         }
 
-        /* Titolo */
-        h1 {
-            color: #667eea;
-            margin-bottom: 10px;
-            font-size: 2em;
+        .keyboard-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
         }
 
-        /* Sottotitolo */
-        .subtitle {
-            color: #666;
-            margin-bottom: 30px;
-            font-size: 1.1em;
-        }
-
-        /* Area di interazione */
-        .interactive-area {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 30px;
-            margin: 20px 0;
-        }
-
-        /* Counter display */
-        .counter {
-            font-size: 3em;
+        .key-btn {
+            background: var(--bg-light);
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 12px 16px;
+            min-width: 50px;
+            font-size: 1em;
             font-weight: bold;
-            color: #667eea;
-            margin: 20px 0;
+            color: var(--text-dark);
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
         }
 
-        /* Bottoni */
+        .key-btn:hover {
+            background: #e5e7eb;
+            transform: translateY(-2px);
+        }
+
+        .key-btn:active {
+            transform: translateY(0);
+            background: var(--primary);
+            color: white;
+        }
+
+        .key-btn.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .key-btn.small {
+            min-width: 40px;
+            padding: 10px 12px;
+            font-size: 0.9em;
+        }
+
+        /* ===== ACTION BUTTONS ===== */
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
         .btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
             border: none;
-            padding: 15px 30px;
+            padding: 14px 28px;
             border-radius: 50px;
-            font-size: 1.1em;
-            cursor: pointer;
-            margin: 5px;
-            transition: transform 0.2s, box-shadow 0.2s;
+            font-size: 1em;
             font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: var(--shadow);
         }
 
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 6px 12px rgba(102, 126, 234, 0.4);
         }
 
         .btn:active {
             transform: translateY(0);
         }
 
-        /* Info footer */
-        .info {
-            margin-top: 20px;
-            color: #999;
-            font-size: 0.9em;
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
         }
 
-        /* Responsive per schermi piccoli */
+        .btn-secondary {
+            background: #6b7280;
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 6px 12px rgba(107, 114, 128, 0.4);
+        }
+
+        /* ===== FEEDBACK AREA ===== */
+        .feedback {
+            background: var(--bg-light);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+
+        .feedback.show {
+            display: block;
+        }
+
+        .feedback.success {
+            background: #d1fae5;
+            border: 2px solid var(--success);
+        }
+
+        .feedback.error {
+            background: #fee2e2;
+            border: 2px solid var(--error);
+        }
+
+        .feedback-icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        .feedback-message {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .feedback-details {
+            font-size: 0.95em;
+            color: var(--text-light);
+            margin-top: 10px;
+        }
+
+        .alternatives {
+            margin-top: 15px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 8px;
+        }
+
+        .alternatives-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: var(--text-dark);
+        }
+
+        .alternatives-list {
+            font-family: 'Courier New', monospace;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 480px) {
-            .container {
+            .app-container {
                 padding: 20px;
             }
 
-            h1 {
+            .app-header h1 {
+                font-size: 1.4em;
+            }
+
+            .exercise-question {
+                font-size: 1.1em;
+            }
+
+            .fretting-display .fretting {
+                font-size: 3em;
+            }
+
+            .current-input {
                 font-size: 1.5em;
             }
 
-            .subtitle {
-                font-size: 1em;
-            }
-
-            .counter {
-                font-size: 2em;
+            .key-btn {
+                min-width: 44px;
+                padding: 10px 14px;
             }
 
             .btn {
-                padding: 12px 20px;
-                font-size: 1em;
+                padding: 12px 24px;
+                font-size: 0.95em;
             }
+        }
+
+        /* ===== SETTINGS PANEL ===== */
+        .settings-panel {
+            background: var(--bg-light);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .settings-title {
+            font-size: 1em;
+            font-weight: bold;
+            color: var(--text-dark);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .settings-section {
+            margin: 15px 0;
+        }
+
+        .settings-label {
+            font-size: 0.9em;
+            color: var(--text-light);
+            margin-bottom: 10px;
+            display: block;
+            font-weight: 600;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .radio-option {
+            position: relative;
+        }
+
+        .radio-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .radio-option label {
+            display: inline-block;
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            color: var(--text-dark);
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+        }
+
+        .radio-option label:hover {
+            background: #f3f4f6;
+            border-color: var(--primary);
+        }
+
+        .radio-option input[type="radio"]:checked + label {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* ===== HIDDEN UTILITY ===== */
+        .hidden {
+            display: none !important;
         }
     </style>
 </head>
 <body>
     <!-- ========================================
          HTML SECTION
-         Struttura del contenuto
+         Struttura dell'applicazione
          ======================================== -->
-    <div class="container">
-        <h1>🎸 Bass Notes Learning</h1>
-        <p class="subtitle">Benvenuto nella tua app di apprendimento</p>
+    <div class="app-container">
+        <!-- Header with Score -->
+        <header class="app-header">
+            <h1>🎸 Bass Notes Learning</h1>
+            <div class="score-display">
+                Score: <span class="score" id="score">0</span>
+            </div>
+        </header>
 
-        <div class="interactive-area">
-            <p>Clicca i bottoni per testare l'interattività:</p>
-            <div class="counter" id="counter">0</div>
-            <button class="btn" onclick="incrementCounter()">Incrementa +</button>
-            <button class="btn" onclick="decrementCounter()">Decrementa -</button>
-            <button class="btn" onclick="resetCounter()">Reset</button>
+        <!-- Settings Panel -->
+        <div class="settings-panel">
+            <div class="settings-title">⚙️ Impostazioni</div>
+
+            <!-- Exercise Type Selection -->
+            <div class="settings-section">
+                <label class="settings-label">Tipo di Esercizio</label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" id="exercise-type-1" name="exercise-type" value="1" checked>
+                        <label for="exercise-type-1">Tipo 1: Nota → Fretting</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="exercise-type-2" name="exercise-type" value="2">
+                        <label for="exercise-type-2">Tipo 2: Fretting → Nota</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fret Range Selection -->
+            <div class="settings-section">
+                <label class="settings-label">Range Fret (Difficoltà)</label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" id="fret-range-9" name="fret-range" value="9" checked>
+                        <label for="fret-range-9">Fino a 9 (Facile)</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="fret-range-12" name="fret-range" value="12">
+                        <label for="fret-range-12">Fino a 12 (Medio)</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="fret-range-20" name="fret-range" value="20">
+                        <label for="fret-range-20">Fino a 20 (Completo)</label>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="info">
-            <p>Versione: 1.0.0 | HTML + CSS + JavaScript</p>
-            <p>Single File App - Pronta per mobile</p>
+        <!-- Exercise Container -->
+        <div class="exercise-container">
+            <div class="exercise-type" id="exercise-type">Loading...</div>
+            <div class="exercise-question" id="exercise-question">Preparazione...</div>
+        </div>
+
+        <!-- Staff Container (for VexFlow) -->
+        <div id="staff-container" class="hidden">
+            <div id="staff-canvas"></div>
+            <div class="hint-controls">
+                <input type="checkbox" id="show-hint-checkbox">
+            </div>
+            <div id="note-hint" class="note-hint hidden"></div>
+        </div>
+
+        <!-- Fretting Display (for Type 2 exercise) -->
+        <div id="fretting-display" class="fretting-display hidden">
+            <div class="fretting" id="fretting-text">--</div>
+        </div>
+
+        <!-- Virtual Keyboard -->
+        <div id="keyboard-container" class="keyboard-container">
+            <!-- Keyboard will be rendered by JavaScript -->
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn" id="confirm-btn">Conferma</button>
+            <button class="btn btn-secondary" id="solution-btn">Soluzione</button>
+            <button class="btn btn-secondary" id="skip-btn">Salta</button>
+        </div>
+
+        <!-- Feedback Area -->
+        <div id="feedback" class="feedback">
+            <div class="feedback-icon" id="feedback-icon">✓</div>
+            <div class="feedback-message" id="feedback-message">Messaggio</div>
+            <div class="feedback-details" id="feedback-details"></div>
+        </div>
+
+        <!-- Next Exercise Button (shown after feedback) -->
+        <div class="action-buttons hidden" id="next-container">
+            <button class="btn" id="next-btn">Prossimo Esercizio</button>
         </div>
     </div>
 
     <!-- ========================================
          JAVASCRIPT SECTION
-         Tutta la logica dell'applicazione
+         Architettura modulare con classi
          ======================================== -->
     <script>
-        // =====================================
-        // VARIABILI GLOBALI
-        // =====================================
-        let count = 0;
+        'use strict';
 
         // =====================================
-        // FUNZIONI DI UTILITÀ
+        // DATA LAYER: MusicTheory
+        // Gestisce conversioni note ↔ fretting
         // =====================================
+        class MusicTheory {
+            constructor() {
+                // Note naturali (no accidenti)
+                this.NOTES = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
 
-        /**
-         * Aggiorna il display del counter nel DOM
-         */
-        function updateDisplay() {
-            const counterElement = document.getElementById('counter');
-            counterElement.textContent = count;
+                // Offset in semitoni da C
+                this.NOTE_OFFSETS = {
+                    'C': 0, 'D': 2, 'E': 4, 'F': 5,
+                    'G': 7, 'A': 9, 'B': 11
+                };
 
-            // Animazione visiva
-            counterElement.style.transform = 'scale(1.2)';
-            setTimeout(() => {
-                counterElement.style.transform = 'scale(1)';
-            }, 200);
+                // ACCORDATURA STANDARD BASSO 4 CORDE (da più bassa a più alta)
+                // Valori MIDI verificati - QUESTA È LA "BIBBIA" DI RIFERIMENTO:
+                //   e0 (E string, fret 0) → E1 (MIDI 28)
+                //   a0 (A string, fret 0) → A1 (MIDI 33)
+                //   d0 (D string, fret 0) → D2 (MIDI 38)
+                //   g0 (G string, fret 0) → G2 (MIDI 43)
+                this.TUNING = {
+                    'e': 28,  // E1 - corda più bassa
+                    'a': 33,  // A1
+                    'd': 38,  // D2
+                    'g': 43   // G2 - corda più alta
+                };
+
+                this.MAX_FRETS = 20;
+            }
+
+            /**
+             * Converte fretting in nota
+             * @param {string} fretting - Es: "a3", "e0", "d12"
+             * @returns {string|null} - Es: "C2", "E1", null se invalido
+             */
+            frettingToNote(fretting) {
+                if (!fretting || fretting.length < 2) return null;
+
+                const stringName = fretting[0].toLowerCase();
+                const fretNumber = parseInt(fretting.substring(1));
+
+                if (!(stringName in this.TUNING)) return null;
+                if (isNaN(fretNumber) || fretNumber < 0 || fretNumber > this.MAX_FRETS) {
+                    return null;
+                }
+
+                // Calcola semitoni assoluti
+                const absoluteSemitone = this.TUNING[stringName] + fretNumber;
+
+                // Converti in nota + ottava
+                return this._semitonesToNote(absoluteSemitone);
+            }
+
+            /**
+             * Converte nota in tutti i fretting possibili
+             * @param {string} note - Es: "C2", "E1", "G3"
+             * @returns {string[]} - Es: ["a3", "e8", "d13"]
+             */
+            noteToFrettings(note) {
+                if (!note || note.length < 2) return [];
+
+                const noteName = note[0].toUpperCase();
+                const octave = parseInt(note.substring(1));
+
+                if (!this.NOTES.includes(noteName) || isNaN(octave)) {
+                    return [];
+                }
+
+                // Calcola semitoni assoluti della nota target
+                const targetSemitone = this._noteToSemitones(noteName, octave);
+                const frettings = [];
+
+                // Prova ogni corda
+                for (const [stringName, openSemitone] of Object.entries(this.TUNING)) {
+                    const fretNumber = targetSemitone - openSemitone;
+
+                    if (fretNumber >= 0 && fretNumber <= this.MAX_FRETS) {
+                        frettings.push(`${stringName}${fretNumber}`);
+                    }
+                }
+
+                return frettings;
+            }
+
+            /**
+             * Genera nota random nel range del basso (con posizioni valide nel maxFrets corrente)
+             * @returns {string} - Es: "C2", "E3"
+             */
+            getRandomNote() {
+                const allNotes = this._generateAllNotes();
+
+                // Filtra solo note che hanno almeno una posizione valida con maxFrets corrente
+                const validNotes = allNotes.filter(note => {
+                    const frettings = this.noteToFrettings(note);
+                    return frettings.length > 0;
+                });
+
+                if (validNotes.length === 0) {
+                    // Fallback: ritorna E1 che è sempre valido (e0)
+                    return 'E1';
+                }
+
+                return validNotes[Math.floor(Math.random() * validNotes.length)];
+            }
+
+            /**
+             * Genera fretting random (solo note naturali)
+             * @returns {string} - Es: "a5", "d12"
+             */
+            getRandomFretting() {
+                // Genera finché non troviamo un fretting che corrisponde a una nota naturale
+                let fretting, note;
+                let attempts = 0;
+                const maxAttempts = 100;
+
+                do {
+                    const strings = Object.keys(this.TUNING);
+                    const randomString = strings[Math.floor(Math.random() * strings.length)];
+                    const randomFret = Math.floor(Math.random() * (this.MAX_FRETS + 1));
+                    fretting = `${randomString}${randomFret}`;
+                    note = this.frettingToNote(fretting);
+                    attempts++;
+                } while (!note && attempts < maxAttempts);
+
+                // Fallback sicuro se non troviamo una nota valida
+                return note ? fretting : 'e0';  // e0 (fretting) produce sempre E0 (nota naturale)
+            }
+
+            /**
+             * Valida formato nota
+             * @param {string} note - Es: "C2"
+             * @returns {boolean}
+             */
+            isValidNote(note) {
+                if (!note || note.length < 2) return false;
+                const noteName = note[0].toUpperCase();
+                const octave = parseInt(note.substring(1));
+                return this.NOTES.includes(noteName) && !isNaN(octave) && octave >= 0 && octave <= 8;
+            }
+
+            /**
+             * Valida formato fretting
+             * @param {string} fretting - Es: "a3"
+             * @returns {boolean}
+             */
+            isValidFretting(fretting) {
+                if (!fretting || fretting.length < 2) return false;
+                const stringName = fretting[0].toLowerCase();
+                const fretNumber = parseInt(fretting.substring(1));
+                return (stringName in this.TUNING) &&
+                       !isNaN(fretNumber) &&
+                       fretNumber >= 0 &&
+                       fretNumber <= this.MAX_FRETS;
+            }
+
+            // ===== PRIVATE METHODS =====
+
+            _semitonesToNote(semitones) {
+                // MIDI numbering: semitone 0 = C-1, semitone 12 = C0, semitone 24 = C1, etc.
+                // Formula: octave = floor(semitones / 12) - 1
+                const octave = Math.floor(semitones / 12) - 1;
+                const noteIndex = semitones % 12;
+
+                // Map semitone in nota (solo naturali)
+                const semitonesToNotes = {
+                    0: 'C', 2: 'D', 4: 'E', 5: 'F',
+                    7: 'G', 9: 'A', 11: 'B'
+                };
+
+                const noteName = semitonesToNotes[noteIndex];
+                return noteName ? `${noteName}${octave}` : null;
+            }
+
+            _noteToSemitones(noteName, octave) {
+                // Inverse of _semitonesToNote: add 1 to octave for MIDI numbering
+                return (octave + 1) * 12 + this.NOTE_OFFSETS[noteName];
+            }
+
+            _generateAllNotes() {
+                const notes = [];
+                // Range: E1 (MIDI 28) to E4 (MIDI 64) - standard 4-string bass range
+                // e0 → E1 (lowest), g20 → D#4 (MIDI 63, highest fret)
+                for (let semitone = 28; semitone <= 64; semitone++) {
+                    const note = this._semitonesToNote(semitone);
+                    if (note) notes.push(note);
+                }
+                return notes;
+            }
         }
 
         // =====================================
-        // FUNZIONI PRINCIPALI
+        // PRESENTATION LAYER: StaffRenderer
+        // Wrapper per VexFlow
         // =====================================
+        class StaffRenderer {
+            constructor(containerId) {
+                this.container = document.getElementById(containerId);
+                this.vf = null;
+                this.context = null;
+            }
 
-        /**
-         * Incrementa il contatore di 1
-         */
-        function incrementCounter() {
-            count++;
-            updateDisplay();
-            console.log('Counter incrementato a:', count);
+            /**
+             * Renderizza una nota sul pentagramma
+             * @param {string} note - Es: "C2", "E1"
+             */
+            render(note) {
+                if (!note) return;
+
+                // Pulisci container
+                this.container.innerHTML = '';
+
+                // Crea renderer VexFlow
+                const VF = Vex.Flow;
+                this.vf = new VF.Factory({
+                    renderer: { elementId: this.container.id, width: 400, height: 200 }
+                });
+
+                this.context = this.vf.getContext();
+
+                // Crea pentagramma con chiave di basso
+                const stave = this.vf.Stave({ x: 10, y: 40, width: 350 });
+                stave.addClef('bass').addTimeSignature('4/4');
+
+                // Converti nota in formato VexFlow (es: "C2" → {key: "c/2", accidental: "#"})
+                const vexNoteData = this._toVexFlowNotation(note);
+
+                // Crea nota
+                const staveNote = this.vf.StaveNote({
+                    keys: [vexNoteData.key],
+                    duration: 'w'
+                });
+
+                // Aggiungi alterazione se presente
+                if (vexNoteData.accidental) {
+                    staveNote.addModifier(new VF.Accidental(vexNoteData.accidental), 0);
+                }
+
+                const notes = [staveNote];
+
+                // Crea voice e formatta
+                const voice = this.vf.Voice().setMode(VF.Voice.Mode.SOFT);
+                voice.addTickables(notes);
+
+                const formatter = this.vf.Formatter();
+                formatter.joinVoices([voice]).formatToStave([voice], stave);
+
+                // Render
+                stave.setContext(this.context).draw();
+                voice.draw(this.context, stave);
+            }
+
+            /**
+             * Pulisce il pentagramma
+             */
+            clear() {
+                this.container.innerHTML = '';
+            }
+
+            // ===== PRIVATE METHODS =====
+
+            _toVexFlowNotation(note) {
+                // OFFSET DISPLAY: Sistema per posizionare correttamente le note del basso sul pentagramma
+                // Il basso suona molto più basso di come viene scritto in chiave di basso.
+                // Per evitare troppe linee aggiuntive, le note vengono "trasposte" visivamente.
+                //
+                // Offset totale = (OCTAVE_OFFSET * 12) + SEMITONE_OFFSET
+                // Valori corretti per basso 4 corde (E A D G):
+                const OCTAVE_OFFSET = 3;     // Ottave intere: 3 ottave = 36 semitoni
+                const SEMITONE_OFFSET = 0;   // NESSUN aggiustamento - test empirico
+                // TOTALE: 33 semitoni (circa 2 ottave e mezzo di trasposizione visiva)
+                //
+                // Risultato: e0 (E1) appare nello spazio sotto il pentagramma
+                //            C2 appare tra 2a e 3a riga dal basso
+
+                // Parse nota (supporta C2, C#2, Cb2, Cs2, Cf2, etc.)
+                let noteName, octave, accidental = '';
+                if (note.length >= 3 && (note[1] === '#' || note[1] === 'b' || note[1] === 's' || note[1] === 'S' || note[1] === 'f' || note[1] === 'F')) {
+                    // Nota con alterazione: C#2, Db3, Cs2 (sharp), Cf2 (flat), etc.
+                    noteName = note[0].toUpperCase();
+                    const acc = note[1].toLowerCase();
+                    // Converti notazione URL: s→#, f→b (flat usa già 'b')
+                    if (acc === 's') accidental = '#';
+                    else if (acc === 'f') accidental = 'b';
+                    else accidental = acc; // già # o b
+                    octave = parseInt(note.substring(2));
+                } else {
+                    // Nota naturale: C2, D3, etc.
+                    noteName = note[0].toUpperCase();
+                    octave = parseInt(note.substring(1));
+                }
+
+                // Validazione input
+                if (!noteName || isNaN(octave)) {
+                    console.error(`Nota invalida: "${note}". Usa formato: C2, E1, C#3, etc.`);
+                    return {key: 'c/4', accidental: null}; // fallback
+                }
+
+                // Mappa note → offset semitoni
+                const NOTE_OFFSETS = {'C': 0, 'D': 2, 'E': 4, 'F': 5, 'G': 7, 'A': 9, 'B': 11};
+
+                // Calcola semitoni totali della nota (incluse alterazioni)
+                let totalSemitones = (octave + 1) * 12 + NOTE_OFFSETS[noteName];
+                if (accidental === '#') totalSemitones += 1;
+                if (accidental === 'b') totalSemitones -= 1;
+
+                // Applica offset: ottave + semitoni
+                const adjustedSemitones = totalSemitones + (OCTAVE_OFFSET * 12) + SEMITONE_OFFSET;
+
+                // Riconverti in nota + ottava (con supporto diesis/bemolle)
+                const adjustedOctave = Math.floor(adjustedSemitones / 12) - 1;
+                const noteIndex = adjustedSemitones % 12;
+
+                // Mappa semitoni → nota base + alterazione
+                const semitoneMap = {
+                    0:  {note: 'c', acc: null},  1:  {note: 'c', acc: '#'},
+                    2:  {note: 'd', acc: null},  3:  {note: 'd', acc: '#'},
+                    4:  {note: 'e', acc: null},  5:  {note: 'f', acc: null},
+                    6:  {note: 'f', acc: '#'},   7:  {note: 'g', acc: null},
+                    8:  {note: 'g', acc: '#'},   9:  {note: 'a', acc: null},
+                    10: {note: 'a', acc: '#'},   11: {note: 'b', acc: null}
+                };
+
+                const noteData = semitoneMap[noteIndex];
+                return {
+                    key: `${noteData.note}/${adjustedOctave}`,
+                    accidental: noteData.acc
+                };
+            }
         }
 
-        /**
-         * Decrementa il contatore di 1
-         */
-        function decrementCounter() {
-            count--;
-            updateDisplay();
-            console.log('Counter decrementato a:', count);
+        // =====================================
+        // PRESENTATION LAYER: VirtualKeyboard
+        // Base class per tastiere input
+        // =====================================
+        class VirtualKeyboard {
+            constructor(containerId) {
+                this.container = document.getElementById(containerId);
+                this.currentInput = '';
+                this.onInputChange = null;  // Callback
+            }
+
+            /**
+             * Renderizza la tastiera
+             */
+            render() {
+                // Override in subclass
+            }
+
+            /**
+             * Gestisce input di un carattere/numero
+             */
+            handleInput(value) {
+                this.currentInput += value;
+                this._updateDisplay();
+                if (this.onInputChange) {
+                    this.onInputChange(this.currentInput);
+                }
+            }
+
+            /**
+             * Reset input corrente
+             */
+            reset() {
+                this.currentInput = '';
+                this._updateDisplay();
+                if (this.onInputChange) {
+                    this.onInputChange(this.currentInput);
+                }
+            }
+
+            /**
+             * Backspace
+             */
+            backspace() {
+                this.currentInput = this.currentInput.slice(0, -1);
+                this._updateDisplay();
+                if (this.onInputChange) {
+                    this.onInputChange(this.currentInput);
+                }
+            }
+
+            /**
+             * Ottiene input corrente
+             */
+            getValue() {
+                return this.currentInput;
+            }
+
+            /**
+             * Setta input programmaticamente
+             */
+            setValue(value) {
+                this.currentInput = value;
+                this._updateDisplay();
+            }
+
+            // ===== PRIVATE METHODS =====
+
+            _updateDisplay() {
+                const display = this.container.querySelector('.current-input');
+                if (display) {
+                    display.textContent = this.currentInput || '--';
+                }
+            }
+
+            _createButton(text, onClick, className = '') {
+                const btn = document.createElement('button');
+                btn.className = `key-btn ${className}`;
+                btn.textContent = text;
+                btn.onclick = onClick;
+                return btn;
+            }
         }
 
-        /**
-         * Resetta il contatore a 0
-         */
-        function resetCounter() {
-            count = 0;
-            updateDisplay();
-            console.log('Counter resettato');
+        // =====================================
+        // FrettingKeyboard: Input per fretting
+        // =====================================
+        class FrettingKeyboard extends VirtualKeyboard {
+            constructor(containerId, maxFrets = 20) {
+                super(containerId);
+                this.maxFrets = maxFrets;
+            }
+
+            render() {
+                this.container.innerHTML = `
+                    <div class="keyboard-label">Inserisci il fretting</div>
+                    <div class="current-input">--</div>
+
+                    <div class="keyboard-section">
+                        <div class="keyboard-section-label">Corda</div>
+                        <div class="keyboard-buttons" id="string-buttons"></div>
+                    </div>
+
+                    <div class="keyboard-section">
+                        <div class="keyboard-section-label">Fret (0-${this.maxFrets})</div>
+                        <div class="keyboard-buttons" id="fret-buttons"></div>
+                    </div>
+
+                    <div class="keyboard-section">
+                        <div class="keyboard-buttons" id="control-buttons"></div>
+                    </div>
+                `;
+
+                // Bottoni corde
+                const stringContainer = this.container.querySelector('#string-buttons');
+                ['e', 'a', 'd', 'g'].forEach(str => {
+                    stringContainer.appendChild(
+                        this._createButton(str.toUpperCase(), () => {
+                            if (this.currentInput.length === 0) {
+                                this.handleInput(str);
+                            }
+                        })
+                    );
+                });
+
+                // Bottoni fret (0 fino a maxFrets)
+                const fretContainer = this.container.querySelector('#fret-buttons');
+                for (let i = 0; i <= this.maxFrets; i++) {
+                    fretContainer.appendChild(
+                        this._createButton(i.toString(), () => {
+                            if (this.currentInput.length > 0 && this.currentInput.length < 3) {
+                                this.handleInput(i.toString());
+                            }
+                        }, 'small')
+                    );
+                }
+
+                // Bottoni controllo
+                const controlContainer = this.container.querySelector('#control-buttons');
+                controlContainer.appendChild(
+                    this._createButton('Reset', () => this.reset())
+                );
+                controlContainer.appendChild(
+                    this._createButton('←', () => this.backspace())
+                );
+            }
         }
 
         // =====================================
-        // INIZIALIZZAZIONE
+        // NoteKeyboard: Input per note
         // =====================================
+        class NoteKeyboard extends VirtualKeyboard {
+            render() {
+                this.container.innerHTML = `
+                    <div class="keyboard-label">Inserisci la nota</div>
+                    <div class="current-input">--</div>
 
-        /**
-         * Funzione eseguita al caricamento della pagina
-         */
-        window.onload = function() {
-            console.log('Bass Notes Learning - App inizializzata');
-            updateDisplay();
+                    <div class="keyboard-section">
+                        <div class="keyboard-section-label">Nota</div>
+                        <div class="keyboard-buttons" id="note-buttons"></div>
+                    </div>
 
-            // Aggiungi transizione smooth al counter
-            const counterElement = document.getElementById('counter');
-            counterElement.style.transition = 'transform 0.2s ease';
-        };
+                    <div class="keyboard-section">
+                        <div class="keyboard-section-label">Ottava (opzionale per +1 punto)</div>
+                        <div class="keyboard-buttons" id="octave-buttons"></div>
+                    </div>
+
+                    <div class="keyboard-section">
+                        <div class="keyboard-buttons" id="control-buttons"></div>
+                    </div>
+                `;
+
+                // Bottoni note
+                const noteContainer = this.container.querySelector('#note-buttons');
+                ['A', 'B', 'C', 'D', 'E', 'F', 'G'].forEach(note => {
+                    noteContainer.appendChild(
+                        this._createButton(note, () => {
+                            if (this.currentInput.length === 0) {
+                                this.handleInput(note);
+                            }
+                        })
+                    );
+                });
+
+                // Bottoni ottave
+                const octaveContainer = this.container.querySelector('#octave-buttons');
+                for (let i = 1; i <= 5; i++) {
+                    octaveContainer.appendChild(
+                        this._createButton(i.toString(), () => {
+                            if (this.currentInput.length === 1) {
+                                this.handleInput(i.toString());
+                            }
+                        })
+                    );
+                }
+
+                // Bottoni controllo
+                const controlContainer = this.container.querySelector('#control-buttons');
+                controlContainer.appendChild(
+                    this._createButton('Reset', () => this.reset())
+                );
+                controlContainer.appendChild(
+                    this._createButton('←', () => this.backspace())
+                );
+            }
+        }
 
         // =====================================
-        // EVENT LISTENERS & GESTIONE EVENTI
+        // BUSINESS LOGIC: Exercise Base Class
         // =====================================
+        class Exercise {
+            constructor(musicTheory) {
+                this.musicTheory = musicTheory;
+                this.currentQuestion = null;
+                this.currentAnswer = null;
+            }
 
-        // Gestione tastiera (spazio per incrementare, backspace per decrementare)
-        document.addEventListener('keydown', function(event) {
-            if (event.code === 'Space') {
-                event.preventDefault();
-                incrementCounter();
-            } else if (event.code === 'Backspace') {
-                event.preventDefault();
-                decrementCounter();
-            } else if (event.code === 'Escape') {
-                resetCounter();
+            /**
+             * Genera una nuova domanda
+             */
+            generateQuestion() {
+                // Override in subclass
+            }
+
+            /**
+             * Valida la risposta utente
+             * @param {string} userAnswer
+             * @returns {object} - {correct: boolean, points: number, message: string, details: object}
+             */
+            validateAnswer(userAnswer) {
+                // Override in subclass
+            }
+
+            /**
+             * Ottiene il tipo di esercizio
+             */
+            getType() {
+                return 'Base Exercise';
+            }
+        }
+
+        // =====================================
+        // Esercizio Tipo 1: Nota → Fretting
+        // =====================================
+        class NoteToFrettingExercise extends Exercise {
+            generateQuestion() {
+                const note = this.musicTheory.getRandomNote();
+                const correctFrettings = this.musicTheory.noteToFrettings(note);
+
+                this.currentQuestion = note;
+                this.currentAnswer = correctFrettings;
+
+                return {
+                    type: 'note-to-fretting',
+                    note: note,
+                    question: `Qual è il fretting per questa nota?`
+                };
+            }
+
+            validateAnswer(userAnswer) {
+                if (!userAnswer) {
+                    return {
+                        correct: false,
+                        points: 0,
+                        message: 'Nessuna risposta inserita',
+                        details: {}
+                    };
+                }
+
+                const isCorrect = this.currentAnswer.includes(userAnswer.toLowerCase());
+
+                return {
+                    correct: isCorrect,
+                    points: isCorrect ? 1 : 0,
+                    message: isCorrect ?
+                        `Corretto! ${userAnswer} è giusto!` :
+                        `Sbagliato. ${userAnswer} non corrisponde a ${this.currentQuestion}`,
+                    details: {
+                        correctAnswers: this.currentAnswer,
+                        userAnswer: userAnswer,
+                        note: this.currentQuestion
+                    }
+                };
+            }
+
+            getType() {
+                return 'Esercizio Tipo 1: Nota → Fretting';
+            }
+        }
+
+        // =====================================
+        // Esercizio Tipo 2: Fretting → Nota
+        // =====================================
+        class FrettingToNoteExercise extends Exercise {
+            generateQuestion() {
+                const fretting = this.musicTheory.getRandomFretting();
+                const correctNote = this.musicTheory.frettingToNote(fretting);
+
+                this.currentQuestion = fretting;
+                this.currentAnswer = correctNote;
+
+                return {
+                    type: 'fretting-to-note',
+                    fretting: fretting,
+                    question: `Che nota è il fretting ${fretting}?`
+                };
+            }
+
+            validateAnswer(userAnswer) {
+                if (!userAnswer) {
+                    return {
+                        correct: false,
+                        points: 0,
+                        message: 'Nessuna risposta inserita',
+                        details: {}
+                    };
+                }
+
+                const correctNote = this.currentAnswer;
+                const correctNoteName = correctNote[0];
+                const correctOctave = correctNote.substring(1);
+
+                const userNoteName = userAnswer[0];
+                const userOctave = userAnswer.substring(1);
+
+                let correct = false;
+                let points = 0;
+                let message = '';
+
+                if (userNoteName.toUpperCase() === correctNoteName && userOctave === correctOctave) {
+                    // Risposta completa corretta
+                    correct = true;
+                    points = 2;
+                    message = `Perfetto! ${userAnswer} è corretto con l'ottava!`;
+                } else if (userNoteName.toUpperCase() === correctNoteName) {
+                    // Solo nota corretta
+                    correct = true;
+                    points = 1;
+                    message = `Buono! ${userNoteName} è corretto. La risposta completa è ${correctNote} (+1 punto invece di +2)`;
+                } else {
+                    // Sbagliato
+                    message = `Sbagliato. La risposta corretta è ${correctNote}`;
+                }
+
+                return {
+                    correct: correct,
+                    points: points,
+                    message: message,
+                    details: {
+                        correctAnswer: correctNote,
+                        userAnswer: userAnswer,
+                        fretting: this.currentQuestion
+                    }
+                };
+            }
+
+            getType() {
+                return 'Esercizio Tipo 2: Fretting → Nota';
+            }
+        }
+
+        // =====================================
+        // STATE: ScoreManager
+        // =====================================
+        class ScoreManager {
+            constructor() {
+                this.score = 0;
+                this.totalExercises = 0;
+                this.correctExercises = 0;
+            }
+
+            addPoints(points) {
+                this.score += points;
+                this.totalExercises++;
+                if (points > 0) {
+                    this.correctExercises++;
+                }
+                this._updateDisplay();
+            }
+
+            reset() {
+                this.score = 0;
+                this.totalExercises = 0;
+                this.correctExercises = 0;
+                this._updateDisplay();
+            }
+
+            getStats() {
+                const accuracy = this.totalExercises > 0 ?
+                    Math.round((this.correctExercises / this.totalExercises) * 100) : 0;
+
+                return {
+                    score: this.score,
+                    total: this.totalExercises,
+                    correct: this.correctExercises,
+                    accuracy: accuracy
+                };
+            }
+
+            _updateDisplay() {
+                const scoreElement = document.getElementById('score');
+                if (scoreElement) {
+                    scoreElement.textContent = this.score;
+
+                    // Animazione
+                    scoreElement.style.transform = 'scale(1.3)';
+                    setTimeout(() => {
+                        scoreElement.style.transform = 'scale(1)';
+                    }, 200);
+                }
+            }
+        }
+
+        // =====================================
+        // ORCHESTRATOR: App
+        // Coordina tutti i componenti
+        // =====================================
+        class App {
+            constructor() {
+                // Inizializza componenti
+                this.musicTheory = new MusicTheory();
+                this.staffRenderer = new StaffRenderer('staff-canvas');
+                this.scoreManager = new ScoreManager();
+
+                // Esercizi disponibili
+                this.exercises = [
+                    new NoteToFrettingExercise(this.musicTheory),
+                    new FrettingToNoteExercise(this.musicTheory)
+                ];
+
+                this.currentExercise = null;
+                this.currentKeyboard = null;
+
+                // Settings
+                this.settings = {
+                    exerciseType: 1,  // Default: Type 1 (Nota → Fretting)
+                    maxFrets: 9       // Default: 9 frets (Facile)
+                };
+
+                // UI Elements
+                this.elements = {
+                    exerciseType: document.getElementById('exercise-type'),
+                    exerciseQuestion: document.getElementById('exercise-question'),
+                    staffContainer: document.getElementById('staff-container'),
+                    noteHint: document.getElementById('note-hint'),
+                    frettingDisplay: document.getElementById('fretting-display'),
+                    frettingText: document.getElementById('fretting-text'),
+                    keyboardContainer: document.getElementById('keyboard-container'),
+                    confirmBtn: document.getElementById('confirm-btn'),
+                    solutionBtn: document.getElementById('solution-btn'),
+                    skipBtn: document.getElementById('skip-btn'),
+                    nextBtn: document.getElementById('next-btn'),
+                    nextContainer: document.getElementById('next-container'),
+                    feedback: document.getElementById('feedback'),
+                    feedbackIcon: document.getElementById('feedback-icon'),
+                    feedbackMessage: document.getElementById('feedback-message'),
+                    feedbackDetails: document.getElementById('feedback-details')
+                };
+
+                this._setupEventListeners();
+            }
+
+            /**
+             * Inizializza l'app
+             */
+            start() {
+                console.log('🎸 Bass Notes Learning - Started!');
+                this.startNewExercise();
+            }
+
+            /**
+             * Inizia un nuovo esercizio
+             */
+            startNewExercise() {
+                // Leggi settings correnti
+                this._readSettings();
+
+                // Scegli esercizio in base ai settings
+                const exerciseIndex = this.settings.exerciseType - 1;  // Type 1 = index 0, Type 2 = index 1
+                this.currentExercise = this.exercises[exerciseIndex];
+
+                // Imposta max frets nella MusicTheory
+                this.musicTheory.MAX_FRETS = this.settings.maxFrets;
+
+                // Genera domanda
+                const question = this.currentExercise.generateQuestion();
+
+                // Reset UI
+                this._resetUI();
+
+                // Mostra tipo esercizio
+                this.elements.exerciseType.textContent = this.currentExercise.getType();
+                this.elements.exerciseQuestion.textContent = question.question;
+
+                // Setup UI specifica per tipo
+                if (question.type === 'note-to-fretting') {
+                    this._setupNoteToFrettingUI(question);
+                } else if (question.type === 'fretting-to-note') {
+                    this._setupFrettingToNoteUI(question);
+                }
+            }
+
+            /**
+             * Conferma risposta
+             */
+            confirmAnswer() {
+                const userAnswer = this.currentKeyboard.getValue();
+
+                if (!userAnswer) {
+                    alert('Inserisci una risposta prima di confermare');
+                    return;
+                }
+
+                // Valida risposta
+                const result = this.currentExercise.validateAnswer(userAnswer);
+
+                // Aggiorna score
+                this.scoreManager.addPoints(result.points);
+
+                // Mostra feedback
+                this._showFeedback(result);
+
+                // Disabilita input
+                this.elements.confirmBtn.disabled = true;
+                this.elements.solutionBtn.disabled = true;
+                this.elements.skipBtn.disabled = true;
+            }
+
+            /**
+             * Salta esercizio
+             */
+            skipExercise() {
+                this.scoreManager.addPoints(0);
+
+                this._showFeedback({
+                    correct: false,
+                    points: 0,
+                    message: 'Esercizio saltato',
+                    details: {}
+                });
+
+                this.elements.confirmBtn.disabled = true;
+                this.elements.solutionBtn.disabled = true;
+                this.elements.skipBtn.disabled = true;
+            }
+
+            /**
+             * Mostra la soluzione senza penalità
+             */
+            showSolution() {
+                this.scoreManager.addPoints(0);
+
+                // Prepara il feedback con la soluzione corretta
+                let feedbackData = {
+                    correct: false,
+                    points: 0,
+                    message: '💡 Soluzione mostrata',
+                    details: {}
+                };
+
+                // Determina la soluzione in base al tipo di esercizio
+                if (this.currentExercise instanceof NoteToFrettingExercise) {
+                    // Tipo 1: mostra tutti i fretting possibili
+                    feedbackData.details.correctAnswers = this.currentExercise.currentAnswer;
+                    feedbackData.details.note = this.currentExercise.currentQuestion;
+                } else if (this.currentExercise instanceof FrettingToNoteExercise) {
+                    // Tipo 2: mostra la nota corretta
+                    feedbackData.details.correctAnswer = this.currentExercise.currentAnswer;
+                    feedbackData.details.fretting = this.currentExercise.currentQuestion;
+                }
+
+                this._showFeedback(feedbackData);
+
+                // Disabilita bottoni
+                this.elements.confirmBtn.disabled = true;
+                this.elements.solutionBtn.disabled = true;
+                this.elements.skipBtn.disabled = true;
+            }
+
+            // ===== PRIVATE METHODS =====
+
+            _setupEventListeners() {
+                this.elements.confirmBtn.onclick = () => this.confirmAnswer();
+                this.elements.solutionBtn.onclick = () => this.showSolution();
+                this.elements.skipBtn.onclick = () => this.skipExercise();
+                this.elements.nextBtn.onclick = () => this.startNewExercise();
+
+                // Auto-refresh quando cambiano i settings
+                const exerciseTypeRadios = document.querySelectorAll('input[name="exercise-type"]');
+                exerciseTypeRadios.forEach(radio => {
+                    radio.addEventListener('change', () => this.startNewExercise());
+                });
+
+                const fretRangeRadios = document.querySelectorAll('input[name="fret-range"]');
+                fretRangeRadios.forEach(radio => {
+                    radio.addEventListener('change', () => this.startNewExercise());
+                });
+
+                // Toggle hint visibility
+                const showHintCheckbox = document.getElementById('show-hint-checkbox');
+                if (showHintCheckbox) {
+                    showHintCheckbox.addEventListener('change', () => {
+                        const noteHint = this.elements.noteHint;
+                        if (showHintCheckbox.checked) {
+                            noteHint.classList.remove('hidden');
+                        } else {
+                            noteHint.classList.add('hidden');
+                        }
+                    });
+                }
+            }
+
+            _readSettings() {
+                // Leggi tipo esercizio selezionato
+                const exerciseTypeRadio = document.querySelector('input[name="exercise-type"]:checked');
+                if (exerciseTypeRadio) {
+                    this.settings.exerciseType = parseInt(exerciseTypeRadio.value);
+                }
+
+                // Leggi range fret selezionato
+                const fretRangeRadio = document.querySelector('input[name="fret-range"]:checked');
+                if (fretRangeRadio) {
+                    this.settings.maxFrets = parseInt(fretRangeRadio.value);
+                }
+            }
+
+            _resetUI() {
+                // Nascondi feedback
+                this.elements.feedback.classList.remove('show', 'success', 'error');
+                this.elements.nextContainer.classList.add('hidden');
+
+                // Abilita bottoni
+                this.elements.confirmBtn.disabled = false;
+                this.elements.solutionBtn.disabled = false;
+                this.elements.skipBtn.disabled = false;
+
+                // Pulisci staff
+                this.staffRenderer.clear();
+            }
+
+            _setupNoteToFrettingUI(question) {
+                // Mostra pentagramma
+                this.elements.staffContainer.classList.remove('hidden');
+                this.elements.frettingDisplay.classList.add('hidden');
+
+                // Renderizza nota
+                this.staffRenderer.render(question.note);
+
+                // Mostra hint con un esempio di fretting e la nota
+                const possibleFrettings = this.musicTheory.noteToFrettings(question.note);
+                if (possibleFrettings.length > 0) {
+                    const exampleFretting = possibleFrettings[0];
+                    this.elements.noteHint.textContent = `es: ${exampleFretting} (${question.note})`;
+                } else {
+                    this.elements.noteHint.textContent = question.note;
+                }
+
+                // Setup tastiera fretting con maxFrets corrente
+                this.currentKeyboard = new FrettingKeyboard('keyboard-container', this.settings.maxFrets);
+                this.currentKeyboard.render();
+            }
+
+            _setupFrettingToNoteUI(question) {
+                // Mostra fretting display
+                this.elements.staffContainer.classList.add('hidden');
+                this.elements.frettingDisplay.classList.remove('hidden');
+                this.elements.frettingText.textContent = question.fretting;
+
+                // Setup tastiera note
+                this.currentKeyboard = new NoteKeyboard('keyboard-container');
+                this.currentKeyboard.render();
+            }
+
+            _showFeedback(result) {
+                const feedback = this.elements.feedback;
+
+                // Imposta classe (success/error)
+                feedback.classList.add('show');
+                if (result.correct) {
+                    feedback.classList.add('success');
+                    feedback.classList.remove('error');
+                    this.elements.feedbackIcon.textContent = '✓';
+                } else {
+                    feedback.classList.add('error');
+                    feedback.classList.remove('success');
+                    this.elements.feedbackIcon.textContent = '✗';
+                }
+
+                // Messaggio
+                this.elements.feedbackMessage.textContent = result.message;
+
+                // Dettagli
+                let detailsHTML = '';
+
+                if (result.details.correctAnswers && result.details.correctAnswers.length > 0) {
+                    // Tipo 1: mostra alternative
+                    const alternatives = result.details.correctAnswers;
+                    console.log('Mostrando alternative:', alternatives);
+                    detailsHTML = `
+                        <div class="alternatives">
+                            <div class="alternatives-title">Posizioni alternative:</div>
+                            <div class="alternatives-list">${alternatives.join(', ')}</div>
+                        </div>
+                    `;
+                } else if (result.details.correctAnswer) {
+                    // Tipo 2: mostra risposta corretta
+                    detailsHTML = `
+                        <div>Risposta corretta: <strong>${result.details.correctAnswer}</strong></div>
+                    `;
+                } else {
+                    // Debug: cosa abbiamo ricevuto?
+                    console.log('Nessuna alternativa trovata. Details:', result.details);
+                    detailsHTML = `<div style="color: var(--text-light);">Nessuna posizione disponibile nel range fret selezionato</div>`;
+                }
+
+                this.elements.feedbackDetails.innerHTML = detailsHTML;
+
+                // Mostra bottone prossimo
+                this.elements.nextContainer.classList.remove('hidden');
+            }
+        }
+
+        // =====================================
+        // INITIALIZATION
+        // Avvia app al caricamento
+        // =====================================
+        window.addEventListener('DOMContentLoaded', () => {
+            const app = new App();
+
+            // Test mode: ?test=E1 o ?test=C2 per visualizzare nota specifica
+            const urlParams = new URLSearchParams(window.location.search);
+            const testNote = urlParams.get('test');
+
+            if (testNote) {
+                // Test mode: visualizza nota specifica
+                console.log(`Test mode: visualizzando nota ${testNote}`);
+                document.querySelector('.settings-panel').style.display = 'none';
+                document.querySelector('.score-display').style.display = 'none';
+                document.getElementById('exercise-question').innerHTML = `<h2>TEST MODE: Nota ${testNote}</h2>`;
+                app.elements.staffContainer.classList.remove('hidden');
+                app.staffRenderer.render(testNote);
+                app.elements.keyboardContainer.innerHTML = '<p style="text-align: center; padding: 20px;">Modalità test - ricarica senza ?test per tornare al gioco</p>';
+                document.querySelector('.action-buttons').style.display = 'none';
+                document.getElementById('next-container').style.display = 'none';
+            } else {
+                app.start();
             }
         });
     </script>

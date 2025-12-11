@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - abcjs vs VexFlow per Bass Clef</title>
+    <script src="https://cdn.jsdelivr.net/npm/vexflow@4.2.2/build/cjs/vexflow.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/abcjs@6.2.3/dist/abcjs-basic-min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1400px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        .library-section {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .library-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        .note-test {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .note-label {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .instructions {
+            background: #e7f3ff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border-left: 4px solid #0066cc;
+        }
+        .instructions h2 {
+            margin-top: 0;
+            color: #0066cc;
+        }
+        .info {
+            background: #fff3cd;
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎸 Confronto: abcjs vs VexFlow per Bass Clef</h1>
+
+    <div class="instructions">
+        <h2>🎯 Obiettivo del Test</h2>
+        <p><strong>Verifica se abcjs posiziona le note del basso meglio di VexFlow</strong></p>
+        <p>Confronta con la tua bibbia (Screenshot 2025-12-11 152638.png):</p>
+        <ul>
+            <li><strong>E1</strong> dovrebbe essere nello <strong>spazio sotto il pentagramma</strong></li>
+            <li><strong>C2</strong> dovrebbe essere <strong>tra 2a e 3a riga dal basso</strong></li>
+        </ul>
+        <p><strong>Quale libreria mostra le note nella posizione corretta?</strong></p>
+    </div>
+
+    <div class="comparison">
+        <!-- ABCJS -->
+        <div class="library-section">
+            <div class="library-title">📘 abcjs (ABC Notation)</div>
+
+            <div class="info">
+                ℹ️ abcjs usa la notazione ABC. In ABC, le virgole abbassano l'ottava.
+            </div>
+
+            <div class="note-test">
+                <div class="note-label">E1 (Mi nella prima ottava)</div>
+                <div id="abc-e1"></div>
+            </div>
+
+            <div class="note-test">
+                <div class="note-label">C2 (Do nella seconda ottava)</div>
+                <div id="abc-c2"></div>
+            </div>
+
+            <div class="note-test">
+                <div class="note-label">A1 (La nella prima ottava)</div>
+                <div id="abc-a1"></div>
+            </div>
+
+            <div class="note-test">
+                <div class="note-label">G2 (Sol nella seconda ottava)</div>
+                <div id="abc-g2"></div>
+            </div>
+        </div>
+
+        <!-- VEXFLOW -->
+        <div class="library-section">
+            <div class="library-title">📗 VexFlow (attuale)</div>
+
+            <div class="info">
+                ℹ️ VexFlow con offset +3 ottave (soluzione attuale)
+            </div>
+
+            <div class="note-test">
+                <div class="note-label">E1 → e/4 (offset +3 ottave)</div>
+                <div id="vex-e1"></div>
+            </div>
+
+            <div class="note-test">
+                <div class="note-label">C2 → c/5 (offset +3 ottave)</div>
+                <div id="vex-c2"></div>
+            </div>
+
+            <div class="note-test">
+                <div class="note-label">A1 → a/4 (offset +3 ottave)</div>
+                <div id="vex-a1"></div>
+            </div>
+
+            <div class="note-test">
+                <div class="note-label">G2 → g/5 (offset +3 ottave)</div>
+                <div id="vex-g2"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // ABCJS RENDERING
+        // ============================================
+
+        // E1 in ABC: E con doppia virgola (E,,) = 2 ottave sotto
+        ABCJS.renderAbc("abc-e1",
+            "X:1\nL:1/1\nK:bass\nE,,|]",
+            { scale: 1.2, staffwidth: 350 }
+        );
+
+        // C2 in ABC: C con virgola (C,) = 1 ottava sotto
+        ABCJS.renderAbc("abc-c2",
+            "X:1\nL:1/1\nK:bass\nC,|]",
+            { scale: 1.2, staffwidth: 350 }
+        );
+
+        // A1 in ABC: A con doppia virgola
+        ABCJS.renderAbc("abc-a1",
+            "X:1\nL:1/1\nK:bass\nA,,|]",
+            { scale: 1.2, staffwidth: 350 }
+        );
+
+        // G2 in ABC: G con virgola
+        ABCJS.renderAbc("abc-g2",
+            "X:1\nL:1/1\nK:bass\nG,|]",
+            { scale: 1.2, staffwidth: 350 }
+        );
+
+        // ============================================
+        // VEXFLOW RENDERING (per confronto)
+        // ============================================
+
+        const VF = Vex.Flow;
+
+        function renderVexNote(containerId, noteKey) {
+            const container = document.getElementById(containerId);
+            const renderer = new VF.Renderer(container, VF.Renderer.Backends.SVG);
+            renderer.resize(400, 150);
+            const context = renderer.getContext();
+
+            const stave = new VF.Stave(10, 20, 350);
+            stave.addClef('bass');
+            stave.setContext(context).draw();
+
+            const notes = [
+                new VF.StaveNote({
+                    keys: [noteKey],
+                    duration: 'w'
+                })
+            ];
+
+            const voice = new VF.Voice({ num_beats: 4, beat_value: 4 });
+            voice.addTickables(notes);
+
+            new VF.Formatter()
+                .joinVoices([voice])
+                .format([voice], 300);
+
+            voice.draw(context, stave);
+        }
+
+        // E1 + 3 ottave = E4
+        renderVexNote('vex-e1', 'e/4');
+
+        // C2 + 3 ottave = C5
+        renderVexNote('vex-c2', 'c/5');
+
+        // A1 + 3 ottave = A4
+        renderVexNote('vex-a1', 'a/4');
+
+        // G2 + 3 ottave = G5
+        renderVexNote('vex-g2', 'g/5');
+    </script>
+</body>
+</html>
