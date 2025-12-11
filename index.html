@@ -108,10 +108,10 @@
         #staff-container {
             background: white;
             border-radius: var(--border-radius);
-            padding: 5px;
-            margin: 4px 0;
+            padding: 2px 5px;
+            margin: 2px 0;
             box-shadow: var(--shadow);
-            min-height: 100px;
+            min-height: 80px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -122,9 +122,14 @@
             max-width: 400px;
         }
 
+        #staff-canvas svg {
+            display: block;
+            margin: 0 auto;
+        }
+
         .hint-controls {
             text-align: center;
-            margin: 4px 0 2px 0;
+            margin: 2px 0 0 0;
         }
 
         .checkbox-label {
@@ -819,9 +824,13 @@
 
                 // Renderizza con abcjs
                 ABCJS.renderAbc(this.container.id, abcString, {
-                    scale: 0.85,
-                    staffwidth: 300,
-                    responsive: 'resize'
+                    scale: 0.75,
+                    staffwidth: 280,
+                    responsive: 'resize',
+                    paddingtop: 0,
+                    paddingbottom: 0,
+                    paddingleft: 0,
+                    paddingright: 0
                 });
             }
 
