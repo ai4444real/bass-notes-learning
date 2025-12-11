@@ -57,48 +57,48 @@
         /* ===== HEADER ===== */
         .app-header {
             text-align: center;
-            margin-bottom: 10px;
-            padding-bottom: 8px;
+            margin-bottom: 6px;
+            padding-bottom: 4px;
             border-bottom: 2px solid var(--bg-light);
         }
 
         .app-header h1 {
             color: var(--primary);
-            font-size: 1.4em;
-            margin-bottom: 3px;
+            font-size: 1.2em;
+            margin-bottom: 2px;
         }
 
         .score-display {
-            font-size: 1em;
+            font-size: 0.85em;
             color: var(--text-light);
             font-weight: bold;
         }
 
         .score-display .score {
             color: var(--primary);
-            font-size: 1.3em;
+            font-size: 1.2em;
         }
 
         /* ===== EXERCISE AREA ===== */
         .exercise-container {
             background: var(--bg-light);
             border-radius: var(--border-radius);
-            padding: 12px;
-            margin: 10px 0;
+            padding: 6px;
+            margin: 4px 0;
         }
 
         .exercise-type {
             text-align: center;
             color: var(--text-light);
-            font-size: 0.75em;
+            font-size: 0.65em;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
         }
 
         .exercise-question {
             text-align: center;
-            font-size: 1.1em;
+            font-size: 0.95em;
             color: var(--text-dark);
             margin-bottom: 0;
             font-weight: 500;
@@ -108,10 +108,10 @@
         #staff-container {
             background: white;
             border-radius: var(--border-radius);
-            padding: 10px;
-            margin: 10px 0;
+            padding: 5px;
+            margin: 4px 0;
             box-shadow: var(--shadow);
-            min-height: 120px;
+            min-height: 100px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -124,7 +124,7 @@
 
         .hint-controls {
             text-align: center;
-            margin: 8px 0 5px 0;
+            margin: 4px 0 2px 0;
         }
 
         .checkbox-label {
@@ -145,8 +145,8 @@
 
         .note-hint {
             text-align: center;
-            margin-top: 5px;
-            font-size: 1em;
+            margin-top: 3px;
+            font-size: 0.85em;
             font-weight: bold;
             color: var(--primary);
             font-family: 'Courier New', monospace;
@@ -157,13 +157,13 @@
             text-align: center;
             background: white;
             border-radius: var(--border-radius);
-            padding: 15px;
-            margin: 10px 0;
+            padding: 10px;
+            margin: 4px 0;
             box-shadow: var(--shadow);
         }
 
         .fretting-display .fretting {
-            font-size: 3em;
+            font-size: 2.5em;
             font-weight: bold;
             color: var(--primary);
             font-family: 'Courier New', monospace;
@@ -173,56 +173,56 @@
         .keyboard-container {
             background: white;
             border-radius: var(--border-radius);
-            padding: 12px;
-            margin: 10px 0;
+            padding: 8px;
+            margin: 4px 0;
             box-shadow: var(--shadow);
         }
 
         .keyboard-label {
             text-align: center;
             color: var(--text-light);
-            font-size: 0.8em;
-            margin-bottom: 6px;
+            font-size: 0.7em;
+            margin-bottom: 4px;
         }
 
         .current-input {
             text-align: center;
-            font-size: 1.6em;
+            font-size: 1.4em;
             font-weight: bold;
             color: var(--primary);
-            min-height: 40px;
+            min-height: 32px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 10px;
+            margin-bottom: 6px;
             font-family: 'Courier New', monospace;
         }
 
         .keyboard-section {
-            margin: 10px 0;
+            margin: 6px 0;
         }
 
         .keyboard-section-label {
-            font-size: 0.75em;
+            font-size: 0.65em;
             color: var(--text-light);
-            margin-bottom: 5px;
+            margin-bottom: 3px;
             text-align: center;
         }
 
         .keyboard-buttons {
             display: flex;
             flex-wrap: wrap;
-            gap: 6px;
+            gap: 4px;
             justify-content: center;
         }
 
         .key-btn {
             background: var(--bg-light);
-            border: 2px solid #e5e7eb;
-            border-radius: 6px;
-            padding: 10px 14px;
-            min-width: 45px;
-            font-size: 0.95em;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            padding: 8px 12px;
+            min-width: 40px;
+            font-size: 0.85em;
             font-weight: bold;
             color: var(--text-dark);
             cursor: pointer;
@@ -248,17 +248,17 @@
         }
 
         .key-btn.small {
-            min-width: 36px;
-            padding: 8px 10px;
-            font-size: 0.85em;
+            min-width: 32px;
+            padding: 6px 8px;
+            font-size: 0.75em;
         }
 
         /* ===== ACTION BUTTONS ===== */
         .action-buttons {
             display: flex;
-            gap: 8px;
+            gap: 5px;
             justify-content: center;
-            margin: 10px 0;
+            margin: 6px 0;
             flex-wrap: wrap;
         }
 
@@ -266,9 +266,9 @@
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 8px 16px;
             border-radius: 50px;
-            font-size: 0.9em;
+            font-size: 0.8em;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s;
@@ -302,8 +302,8 @@
         .feedback {
             background: var(--bg-light);
             border-radius: var(--border-radius);
-            padding: 12px;
-            margin: 10px 0;
+            padding: 8px;
+            margin: 4px 0;
             text-align: center;
             display: none;
             animation: fadeIn 0.3s;
@@ -315,48 +315,50 @@
 
         .feedback.success {
             background: #d1fae5;
-            border: 2px solid var(--success);
+            border: 1px solid var(--success);
         }
 
         .feedback.error {
             background: #fee2e2;
-            border: 2px solid var(--error);
+            border: 1px solid var(--error);
         }
 
         .feedback-icon {
-            font-size: 2em;
-            margin-bottom: 6px;
+            font-size: 1.5em;
+            margin-bottom: 3px;
         }
 
         .feedback-message {
-            font-size: 1em;
+            font-size: 0.85em;
             font-weight: bold;
-            margin-bottom: 6px;
+            margin-bottom: 3px;
         }
 
         .feedback-details {
-            font-size: 0.85em;
+            font-size: 0.75em;
             color: var(--text-light);
-            margin-top: 6px;
+            margin-top: 3px;
         }
 
         .alternatives {
-            margin-top: 8px;
-            padding: 8px;
+            margin-top: 4px;
+            padding: 4px;
             background: rgba(255, 255, 255, 0.5);
-            border-radius: 6px;
+            border-radius: 4px;
         }
 
         .alternatives-title {
             font-weight: bold;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
             color: var(--text-dark);
+            font-size: 0.85em;
         }
 
         .alternatives-list {
             font-family: 'Courier New', monospace;
             color: var(--primary);
             font-weight: bold;
+            font-size: 0.85em;
         }
 
         /* ===== ANIMATIONS ===== */
@@ -374,33 +376,38 @@
         /* ===== RESPONSIVE ===== */
         @media (max-width: 480px) {
             .app-container {
-                padding: 12px;
+                padding: 10px;
             }
 
             .app-header h1 {
-                font-size: 1.3em;
+                font-size: 1.1em;
             }
 
             .exercise-question {
-                font-size: 1em;
+                font-size: 0.9em;
             }
 
             .fretting-display .fretting {
-                font-size: 2.5em;
+                font-size: 2em;
             }
 
             .current-input {
-                font-size: 1.4em;
+                font-size: 1.3em;
             }
 
             .key-btn {
-                min-width: 42px;
-                padding: 8px 12px;
+                min-width: 38px;
+                padding: 7px 10px;
+                font-size: 0.8em;
             }
 
             .btn {
-                padding: 8px 18px;
-                font-size: 0.85em;
+                padding: 7px 14px;
+                font-size: 0.75em;
+            }
+
+            .settings-sections {
+                gap: 4px;
             }
         }
 
@@ -408,33 +415,40 @@
         .settings-panel {
             background: var(--bg-light);
             border-radius: var(--border-radius);
-            padding: 12px;
-            margin: 10px 0;
+            padding: 8px;
+            margin: 6px 0;
         }
 
         .settings-title {
-            font-size: 0.9em;
+            font-size: 0.75em;
             font-weight: bold;
             color: var(--text-dark);
-            margin-bottom: 8px;
+            margin-bottom: 4px;
             text-align: center;
         }
 
+        .settings-sections {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
         .settings-section {
-            margin: 8px 0;
+            margin: 0;
         }
 
         .settings-label {
-            font-size: 0.8em;
+            font-size: 0.7em;
             color: var(--text-light);
-            margin-bottom: 6px;
+            margin-bottom: 4px;
             display: block;
             font-weight: 600;
+            text-align: center;
         }
 
         .radio-group {
             display: flex;
-            gap: 6px;
+            gap: 3px;
             flex-wrap: wrap;
             justify-content: center;
         }
@@ -452,10 +466,10 @@
         .radio-option label {
             display: inline-block;
             background: white;
-            border: 2px solid #e5e7eb;
-            border-radius: 6px;
-            padding: 6px 12px;
-            font-size: 0.75em;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-size: 0.65em;
             font-weight: 600;
             color: var(--text-dark);
             cursor: pointer;
@@ -498,36 +512,38 @@
         <div class="settings-panel">
             <div class="settings-title">⚙️ Impostazioni</div>
 
-            <!-- Exercise Type Selection -->
-            <div class="settings-section">
-                <label class="settings-label">Tipo di Esercizio</label>
-                <div class="radio-group">
-                    <div class="radio-option">
-                        <input type="radio" id="exercise-type-1" name="exercise-type" value="1" checked>
-                        <label for="exercise-type-1">Tipo 1: Nota → Fretting</label>
-                    </div>
-                    <div class="radio-option">
-                        <input type="radio" id="exercise-type-2" name="exercise-type" value="2">
-                        <label for="exercise-type-2">Tipo 2: Fretting → Nota</label>
+            <div class="settings-sections">
+                <!-- Exercise Type Selection -->
+                <div class="settings-section">
+                    <label class="settings-label">Tipo</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="exercise-type-1" name="exercise-type" value="1" checked>
+                            <label for="exercise-type-1">Nota→Fret</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="exercise-type-2" name="exercise-type" value="2">
+                            <label for="exercise-type-2">Fret→Nota</label>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Fret Range Selection -->
-            <div class="settings-section">
-                <label class="settings-label">Range Fret (Difficoltà)</label>
-                <div class="radio-group">
-                    <div class="radio-option">
-                        <input type="radio" id="fret-range-9" name="fret-range" value="9" checked>
-                        <label for="fret-range-9">Fino a 9 (Facile)</label>
-                    </div>
-                    <div class="radio-option">
-                        <input type="radio" id="fret-range-12" name="fret-range" value="12">
-                        <label for="fret-range-12">Fino a 12 (Medio)</label>
-                    </div>
-                    <div class="radio-option">
-                        <input type="radio" id="fret-range-20" name="fret-range" value="20">
-                        <label for="fret-range-20">Fino a 20 (Completo)</label>
+                <!-- Fret Range Selection -->
+                <div class="settings-section">
+                    <label class="settings-label">Range</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="fret-range-9" name="fret-range" value="9" checked>
+                            <label for="fret-range-9">9</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="fret-range-12" name="fret-range" value="12">
+                            <label for="fret-range-12">12</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="fret-range-20" name="fret-range" value="20">
+                            <label for="fret-range-20">20</label>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -803,8 +819,8 @@
 
                 // Renderizza con abcjs
                 ABCJS.renderAbc(this.container.id, abcString, {
-                    scale: 1.0,
-                    staffwidth: 320,
+                    scale: 0.85,
+                    staffwidth: 300,
                     responsive: 'resize'
                 });
             }
