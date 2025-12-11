@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bass Notes Learning</title>
+
+    <!-- ========================================
+         CSS SECTION
+         Tutti gli stili dell'applicazione
+         ======================================== -->
+    <style>
+        /* Reset e configurazione base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Container principale */
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* Titolo */
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+
+        /* Sottotitolo */
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        /* Area di interazione */
+        .interactive-area {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 20px 0;
+        }
+
+        /* Counter display */
+        .counter {
+            font-size: 3em;
+            font-weight: bold;
+            color: #667eea;
+            margin: 20px 0;
+        }
+
+        /* Bottoni */
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin: 5px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        /* Info footer */
+        .info {
+            margin-top: 20px;
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        /* Responsive per schermi piccoli */
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+
+            .subtitle {
+                font-size: 1em;
+            }
+
+            .counter {
+                font-size: 2em;
+            }
+
+            .btn {
+                padding: 12px 20px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ========================================
+         HTML SECTION
+         Struttura del contenuto
+         ======================================== -->
+    <div class="container">
+        <h1>🎸 Bass Notes Learning</h1>
+        <p class="subtitle">Benvenuto nella tua app di apprendimento</p>
+
+        <div class="interactive-area">
+            <p>Clicca i bottoni per testare l'interattività:</p>
+            <div class="counter" id="counter">0</div>
+            <button class="btn" onclick="incrementCounter()">Incrementa +</button>
+            <button class="btn" onclick="decrementCounter()">Decrementa -</button>
+            <button class="btn" onclick="resetCounter()">Reset</button>
+        </div>
+
+        <div class="info">
+            <p>Versione: 1.0.0 | HTML + CSS + JavaScript</p>
+            <p>Single File App - Pronta per mobile</p>
+        </div>
+    </div>
+
+    <!-- ========================================
+         JAVASCRIPT SECTION
+         Tutta la logica dell'applicazione
+         ======================================== -->
+    <script>
+        // =====================================
+        // VARIABILI GLOBALI
+        // =====================================
+        let count = 0;
+
+        // =====================================
+        // FUNZIONI DI UTILITÀ
+        // =====================================
+
+        /**
+         * Aggiorna il display del counter nel DOM
+         */
+        function updateDisplay() {
+            const counterElement = document.getElementById('counter');
+            counterElement.textContent = count;
+
+            // Animazione visiva
+            counterElement.style.transform = 'scale(1.2)';
+            setTimeout(() => {
+                counterElement.style.transform = 'scale(1)';
+            }, 200);
+        }
+
+        // =====================================
+        // FUNZIONI PRINCIPALI
+        // =====================================
+
+        /**
+         * Incrementa il contatore di 1
+         */
+        function incrementCounter() {
+            count++;
+            updateDisplay();
+            console.log('Counter incrementato a:', count);
+        }
+
+        /**
+         * Decrementa il contatore di 1
+         */
+        function decrementCounter() {
+            count--;
+            updateDisplay();
+            console.log('Counter decrementato a:', count);
+        }
+
+        /**
+         * Resetta il contatore a 0
+         */
+        function resetCounter() {
+            count = 0;
+            updateDisplay();
+            console.log('Counter resettato');
+        }
+
+        // =====================================
+        // INIZIALIZZAZIONE
+        // =====================================
+
+        /**
+         * Funzione eseguita al caricamento della pagina
+         */
+        window.onload = function() {
+            console.log('Bass Notes Learning - App inizializzata');
+            updateDisplay();
+
+            // Aggiungi transizione smooth al counter
+            const counterElement = document.getElementById('counter');
+            counterElement.style.transition = 'transform 0.2s ease';
+        };
+
+        // =====================================
+        // EVENT LISTENERS & GESTIONE EVENTI
+        // =====================================
+
+        // Gestione tastiera (spazio per incrementare, backspace per decrementare)
+        document.addEventListener('keydown', function(event) {
+            if (event.code === 'Space') {
+                event.preventDefault();
+                incrementCounter();
+            } else if (event.code === 'Backspace') {
+                event.preventDefault();
+                decrementCounter();
+            } else if (event.code === 'Escape') {
+                resetCounter();
+            }
+        });
+    </script>
+</body>
+</html>
